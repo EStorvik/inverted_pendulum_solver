@@ -16,8 +16,8 @@ m_v = 1
 g = 9.81
 
 # Discretization parameters
-dt = 0.001
-time_steps = 100000
+dt = 0.01
+time_steps = 10000
 t = 0
 
 # Initial conditions
@@ -82,8 +82,10 @@ sp = np.array([beam_length, 0, -pendulum_length])
 horizontal_beam_angles = theta_list
 pendulum_angles = alpha_list
 
-def project_point(p):
-    x, y, z = p
+def project_point(p, angle_z = 0, angle_y = 0):
+    p_l = rl.rotate_by_quaternion(p, angle_z, [0, 1, 0])
+    p_l = rl.rotate_by_quaternion(p_l, angle_y, [0, 0, 1])
+    x, y, z = p_l
     # Simple planar projection onto the screen
     return WIDTH // 2 + int(y), HEIGHT // 2 - int(z)
 
@@ -97,6 +99,13 @@ def draw_furuta_pendulum(screen, beam_angle, pendulum_angle):
 
     # Draw the beam (assuming it's a rod with negligible thickness in the Z-direction)
     pygame.draw.line(screen, BEAM_COLOR, (WIDTH // 2, HEIGHT // 2), (beam_screen_x, beam_screen_y), 5)
+
+    # Draw a black square under the beam
+    square_size = 50  # Adjust this value as needed
+    square_x = beam_screen_x - square_size // 2
+    square_y = beam_screen_y
+    pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(square_x, square_y, square_size, square_size))
+
 
     # Calculate the pendulum endpoints in 3D space
     sp_m = rl.rotate_by_quaternion(sp, beam_angle, [0, 0, 1])
