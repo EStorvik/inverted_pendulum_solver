@@ -6,6 +6,8 @@ import pygame
 import sys
 import math
 
+import control as ct
+
 import robolie as rl
 
 # Model parameters
@@ -16,7 +18,7 @@ m_v = 1
 g = 9.81
 
 # Discretization parameters
-dt = 0.01
+dt = 0.001
 time_steps = 10000
 t = 0
 
@@ -24,12 +26,25 @@ t = 0
 theta = 0
 v = 0
 v_dot = 0
-alpha = -np.pi+np.pi/4
+alpha = np.pi-np.pi/12
 u = 0
 u_dot = 0
 
-def tau_theta(t):
-    return 0
+
+# Control using the python control library
+J = np.array([[0,1,0,0],[0,0,3*g/L,0],[0,0,0,1],[0,0,6*g/L,0]])
+C = np.array([[0],[2/r**2],[0],[3/(L*r)]])
+
+# Placing the poles (Eigenvalues) of the system at lmbda
+lmbda = np.array([-1, -2, -3, -4])
+K = ct.place(J, C, lmbda)
+
+
+def tau_theta(theta, v, alpha, u):
+    out = 0
+    for i in range(4):
+        out += K[0][i]*np.array([theta, v, alpha, u])[i]
+    return out
 
 def F_theta(v, alpha, u, u_dot, tau_theta = 0):
     return (tau_theta-(4*L**2)/3*u*v*np.sin(alpha)*np.cos(alpha)+L*r*(u_dot*np.cos(alpha)-u**2*np.sin(alpha)))/((2*L**2)/(3)*np.sin(alpha)**2+2*r**2)
@@ -41,14 +56,14 @@ theta_list = []
 alpha_list = []
 
 for i in range(time_steps):
-    v_dot = F_theta(v, alpha, u, u_dot, tau_theta=tau_theta(t))
+    v_dot = F_theta(v, alpha, u, u_dot, 0)
     u_dot = F_alpha(v, v_dot, alpha, u)
     
     t += dt
 
     theta += v*dt
     alpha += u*dt
-    v += F_theta(v, alpha, u, u_dot, tau_theta=tau_theta(t))*dt
+    v += F_theta(v, alpha, u, u_dot, tau_theta=0.1*tau_theta(theta, v, alpha, u))*dt
     u += F_alpha(v, v_dot, alpha, u)*dt
 
     theta_list.append(theta)
@@ -101,10 +116,10 @@ def draw_furuta_pendulum(screen, beam_angle, pendulum_angle):
     pygame.draw.line(screen, BEAM_COLOR, (WIDTH // 2, HEIGHT // 2), (beam_screen_x, beam_screen_y), 5)
 
     # Draw a black square under the beam
-    square_size = 50  # Adjust this value as needed
-    square_x = beam_screen_x - square_size // 2
-    square_y = beam_screen_y
-    pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(square_x, square_y, square_size, square_size))
+    # square_size = 50  # Adjust this value as needed
+    # square_x = beam_screen_x - square_size // 2
+    # square_y = beam_screen_y
+    # pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(square_x, square_y, square_size, square_size))
 
 
     # Calculate the pendulum endpoints in 3D space
