@@ -11,7 +11,7 @@ def rhs(x, tau, L, r, g = 9.81):
     y2 = F(theta, theta_dot, alpha, alpha_dot, tau, L, r, g)[0]
     y3 = alpha_dot
     y4 = F(theta, theta_dot, alpha, alpha_dot, tau, L, r, g)[1]
-    return np.array([y1, y2, y3, y4])
+    return np.array([y1, y2[0], y3, y4[0]])
 
 
 def A(alpha, L, r):

@@ -10,13 +10,13 @@ def rk4(f, t0, x0, tn, h = 0.01):
     x = np.zeros((len(x0), len(tt)))
     x[:,0] = x0
     for i, t in enumerate(tt[:-1]):
-        x[:,i+1] = rk4_step(f, t, x[:,i], h)
+        x[:,i+1] = rk4_step(f, x[:,i], h)
         t += h
     return x, tt
 
-def rk4_step(f, t, x, h):
-    k1 = f(t, x)
-    k2 = f(t + h/2, x + h/2*k1)
-    k3 = f(t + h/2, x + h/2*k2)
-    k4 = f(t + h, x + h*k3)
+def rk4_step(f, x, h):
+    k1 = f(x)
+    k2 = f(x + h/2*k1)
+    k3 = f(x + h/2*k2)
+    k4 = f(x + h*k3)
     return x + h/6*(k1 + 2*k2 + 2*k3 + k4)
