@@ -9,7 +9,7 @@ g = 9.81
 theta_0 = 0
 theta_dot_0 = 0
 alpha_dot_0 = 0
-alpha_0 = np.pi-np.pi/4
+alpha_0 = 0
 x0 = np.array([theta_0, theta_dot_0, alpha_0, alpha_dot_0])
 
 # Control using the python control library
@@ -21,12 +21,12 @@ R = np.eye(1)
 control = ip.BalanceControl(x0, A, B, Q, R)
 
 # The control input is given by tau = -Kdx, where dx is the deviation from the equilibrium point (0,0,pi,0)
-tau = control.tau_PID
+tau = control.swing_up
 
 def rhs(x):
     return ip.rhs(x, tau, r, L, g)
 
 h = 0.01
-x, t = ip.rk4(rhs, 0, x0, 10, h)
+x, t = ip.rk4(rhs, 0, x0, 20, h)
 
 ip.visualize_with_pygame(x,h, angle_y = -np.pi/14, angle_z=np.pi/12)
