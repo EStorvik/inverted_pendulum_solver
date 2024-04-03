@@ -3,14 +3,15 @@ import numpy as np
 
 
 def rhs(x, tau, L, r, g = 9.81):
+    tau_theta = tau(x)[0]
     theta = x[0]
     theta_dot = x[1]
     alpha = x[2]
     alpha_dot = x[3]
     y1 = theta_dot
-    y2 = F(theta, theta_dot, alpha, alpha_dot, tau, L, r, g)[0]
+    y2 = F(theta, theta_dot, alpha, alpha_dot, np.array([[tau_theta], [0]]), L, r, g)[0]
     y3 = alpha_dot
-    y4 = F(theta, theta_dot, alpha, alpha_dot, tau, L, r, g)[1]
+    y4 = F(theta, theta_dot, alpha, alpha_dot, np.array([[tau_theta], [0]]), L, r, g)[1]
     return np.array([y1, y2[0], y3, y4[0]])
 
 
