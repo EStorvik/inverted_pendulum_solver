@@ -4,8 +4,8 @@ import control as ct
 
 r = 1
 m_theta = 1
-m_alpha = 0.5
-L = 2
+m_alpha = 1
+L = 1
 g = 9.81
 
 theta_0 = 0
@@ -20,7 +20,7 @@ B = np.array([[0],[1/(r**2*(m_alpha/4+m_theta/3))],[0],[3/(2*L*r*(m_alpha/4+m_th
 Q = np.eye(4)
 R = np.eye(1)
 
-control = ip.BalanceControl(x0, A, B, Q, R)
+control = ip.BalanceControl(x0, A, B, Q, R, k = 200, L = L, m_alpha = m_alpha, g = g)
 
 # The control input is given by tau = -Kdx, where dx is the deviation from the equilibrium point (0,0,pi,0)
 tau = control.swing_up

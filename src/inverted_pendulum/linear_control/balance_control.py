@@ -5,9 +5,13 @@ import numpy as np
 import control as ct
 
 class BalanceControl:
-    def __init__(self, x0: np.ndarray, A: np.ndarray, B: np.ndarray, Q, R):
+    def __init__(self, x0: np.ndarray, A: np.ndarray, B: np.ndarray, Q, R, k = 1, L = 1, m_alpha = 1, g = 9.81):
         self.K, self.S, self.E = ct.lqr(A, B, Q, R)
         self.e = np.array([x0- np.array([0, 0, np.pi, 0])])
+        self.k = k
+        self.L = L
+        self.m_alpha = m_alpha
+        self.g = g
 
     def tau_P(self, x):
         return -self.K @ (x - np.array([0, 0, np.pi, 0]))
@@ -38,10 +42,10 @@ class BalanceControl:
             self.reset_errors()
             return np.array([self.swing_function(x)])
         
-    def swing_function(self, x, k= 10, m= 1, L = 1, g = 9.81):
-        E_0 = 2*m*g*L
-        E = m*g*L*(1-np.cos(x[2])) + m/6*L**2*x[3]**2
-        return k*np.sign((E-E_0)*x[3]*np.cos(x[2]))
+    def swing_function(self, x):
+        E_0 = self.m_alpha*self.g*self.L
+        E = self.m_alpha*self.g*self.L/2*(1-np.cos(x[2])) + self.m_alpha/6*self.L**2*x[3]**2
+        return self.k*np.sign((E-E_0)*x[3]*np.cos(x[2]))
 
     def balance_position(self, x):
         if np.sign(x[2])>0:
