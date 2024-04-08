@@ -29,6 +29,9 @@ class BalanceControl:
         de = self.e[-1] - self.e[-2]
         return -self.K @ (self.e[-1] + de + np.sum(self.e, axis = 0)/len(self.e))
     
+    def u(self, x):
+        pass
+    
     def reset_errors(self):
         self.e = np.array([self.e[-1]])
     
