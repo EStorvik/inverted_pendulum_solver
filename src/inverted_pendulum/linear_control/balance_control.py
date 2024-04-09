@@ -49,9 +49,21 @@ class BalanceControl:
             return np.array([self.swing_function(x)])
         
     def swing_function(self, x):
-        E_0 = self.m_alpha*self.g*self.L
-        E = self.m_alpha*self.g*self.L/2*(1-np.cos(x[2])) + self.m_alpha/6*self.L**2*x[3]**2
-        return self.k*self.r*self.m_theta*np.sign((E-E_0)*x[3]*np.cos(x[2]))
+        # E_0 = self.m_alpha*self.g*self.L
+        # E = self.m_alpha*self.g*self.L/2*(1-np.cos(x[2])) + self.m_alpha/6*self.L**2*x[3]**2
+        # return self.k*self.r*self.m_theta*np.sign((E-E_0)*x[3]*np.cos(x[2]))
+
+        if x[0]< -np.pi/4 :
+            return self.k*self.r*self.m_theta
+        elif x[0]> np.pi/4:
+            return -self.k*self.r*self.m_theta
+        else:
+            return -self.k*self.r*self.m_theta*np.sign(x[3]*np.cos(x[2]))
+
+        # if x[2]*x[3]>0:
+        #     return 0
+        # else:
+        #     return -self.k*self.r*self.m_theta*np.sign(x[3])
 
     def balance_position(self, x):
         if np.sign(x[2])>0:

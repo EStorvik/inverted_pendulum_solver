@@ -19,7 +19,7 @@ Rm = 7.5
 kt = 0.042
 km = kt
 
-print(f"Voltage coefficient: {Rm*r*m_theta/kt}")
+print(f"Voltage coefficient: {Rm/kt}")
 
 theta_0 = 0
 theta_dot_0 = 0
@@ -35,7 +35,7 @@ R = 100*np.eye(1)
 
 
 
-control = ip.BalanceControl(x0, A, B, Q, R, k = 20, L = L, m_alpha = m_alpha, m_theta=m_theta, g = g)
+control = ip.BalanceControl(x0, A, B, Q, R, k = 0.05, L = L, m_alpha = m_alpha, m_theta=m_theta, g = g)
 
 # The control input is given by tau = -Kdx, where dx is the deviation from the equilibrium point (0,0,pi,0)
 tau = control.swing_up

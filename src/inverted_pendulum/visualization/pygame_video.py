@@ -13,7 +13,7 @@ def visualize_with_pygame(x, h, angle_z = 0, angle_y = 0):
     BEAM_COLOR = (0, 0, 255)
     BOX_COLOR = (0, 255, 0)
     PENDULUM_COLOR = (255, 0, 0)
-    FPS = int(1/h)
+    FPS = 60
 
     # Initialize Pygame
     pygame.init()
@@ -43,9 +43,11 @@ def visualize_with_pygame(x, h, angle_z = 0, angle_y = 0):
     # Stationary point
     sp = np.array([beam_length, 0, -pendulum_length])
 
-    # Sample data (replace with your own lists)
-    horizontal_beam_angles = x[0,:]
-    pendulum_angles = x[2,:]
+    # Sample data
+    dx = int(1/(60*h))
+    horizontal_beam_angles = x[0,slice(0, len(x[0,:]), dx)]
+    pendulum_angles = x[2,slice(0, len(x[0,:]), dx)]
+    print(len(horizontal_beam_angles))
 
     def project_point(p):
         p_l = rl.rotate_by_quaternion(p, angle_z, [0, 1, 0])
