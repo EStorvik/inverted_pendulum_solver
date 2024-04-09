@@ -4,6 +4,9 @@ import numpy as np
 
 def rhs(x, tau, L, r, m_theta, m_alpha, g = 9.81):
     tau_theta = tau(x)[0]
+    print(tau_theta)
+#    print(tau_theta)
+#    print(x)
     theta_dot = x[1]
     alpha = x[2]
     alpha_dot = x[3]
