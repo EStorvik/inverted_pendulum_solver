@@ -19,7 +19,6 @@ Rm = 7.5
 kt = 0.042
 km = kt
 
-print(f"Voltage coefficient: {Rm/kt}")
 
 theta_0 = 0
 theta_dot_0 = 0

@@ -7,7 +7,6 @@ import control as ct
 class BalanceControl:
     def __init__(self, x0: np.ndarray, A: np.ndarray, B: np.ndarray, Q, R, k = 1, L = 1, r = 1, m_theta = 1, m_alpha = 1, g = 9.81):
         self.K, self.S, self.E = ct.lqr(A, B, Q, R)
-        print(self.K)
         self.e = np.array([x0- np.array([0, 0, np.pi, 0])])
         self.k = k
         self.L = L
@@ -51,7 +50,7 @@ class BalanceControl:
     def swing_function(self, x):
         # E_0 = self.m_alpha*self.g*self.L
         # E = self.m_alpha*self.g*self.L/2*(1-np.cos(x[2])) + self.m_alpha/6*self.L**2*x[3]**2
-        # return self.k*self.r*self.m_theta*np.sign((E-E_0)*x[3]*np.cos(x[2]))
+        # print(np.sign((E-E_0)))
 
         if x[0]< -np.pi/4 :
             return self.k*self.r*self.m_theta
