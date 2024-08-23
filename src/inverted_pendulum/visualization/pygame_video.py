@@ -22,11 +22,11 @@ def visualize_with_pygame(x, h, angle_z = 0, angle_y = 0):
     pygame.display.set_caption('Furuta Pendulum Simulation')
 
     # Pendulum settings
-    beam_length = 100  # Length of the horizontal beam
-    pendulum_length = 100  # Length of the pendulum
+    beam_length = 250  # Length of the horizontal beam
+    pendulum_length = 250  # Length of the pendulum
     ball_radius = 10  # Radius of the pendulum ball
 
-    box_length =100
+    box_length =250
     # Define the box
     box = box_length * np.array(
         [
